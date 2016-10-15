@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 
 
 @Entity
-public class HorseEvent {
+public class Stg_HorseEvent {
 
 	@Id 
 	private double id;
