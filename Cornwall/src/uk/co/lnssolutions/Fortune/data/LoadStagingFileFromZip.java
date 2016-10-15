@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 //import java.util.zip.ZipInputStream;
@@ -23,10 +25,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 //import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class DataUpdateManager {
+public class LoadStagingFileFromZip {
 
 	public void run() {
-
+ 
 		// Setup DAO
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("Cornwall");
 		EntityManager em = factory.createEntityManager();
@@ -79,7 +81,7 @@ public class DataUpdateManager {
 								String[] data = line.split(",");
 								// System.out.println(data.length);
 								String sportsID = data[0];
-								HorseEvent event = new HorseEvent();
+								Stg_HorseEvent event = new Stg_HorseEvent();
 
 								// Build the object
 								if (sportsID.indexOf('7') > 0) {
@@ -165,6 +167,8 @@ public class DataUpdateManager {
 					em.getTransaction().commit();
 
 					zf.close();
+					renameFileExtension(file,".processed");
+					
 				} catch (FileNotFoundException fnfe) {
 					System.out.println("Unable to find file " + file.getName());
 				} catch (IOException ioe) {
@@ -175,8 +179,39 @@ public class DataUpdateManager {
 		}
 	}
 
+	///////////////////////////////////////////////////////////////////
+	//
+	//  Utility methods
+	
 	private String stripQuotes(String in) {
 		return in.substring(1, in.length() - 1);
 	}
 
+	public  boolean renameFileExtension
+	  (File source, String newExtension)
+	  {
+	    String target;
+	    String currentExtension = getFileExtension(source.getName());
+
+	    if (currentExtension.equals("")){
+	      target = source + "." + newExtension;
+	    }
+	    else {
+	      target = (source.getAbsolutePath()+'/'+source.getName()).replaceFirst(Pattern.quote("." +
+	          currentExtension) + "$", Matcher.quoteReplacement("." + newExtension));
+
+	    }
+	    return source.renameTo(new File(target));
+	  }
+
+	  public  String getFileExtension(String f) {
+	    String ext = "";
+	    int i = f.lastIndexOf('.');
+	    if (i > 0 &&  i < f.length() - 1) {
+	      ext = f.substring(i + 1);
+	    }
+	    return ext;
+	  }
+	
+	
 }
