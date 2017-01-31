@@ -1,9 +1,24 @@
-package uk.co.lnssolutions.Fortune.data;
+package uk.co.lnssolutions.Fortune.data.model;
 
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
-public class HorseEvent {
 
+@Entity
+@NamedQuery(
+	    name="findAllSelectionsForEvent",
+	    query="SELECT e FROM Stg_HorseEvent e WHERE e.event_ID LIKE :event_ID and e.in_play like :inPlay"
+	)
+public class Stg_HorseEvent {
+
+	@Id 
+	private double id;
 	private double event_ID;
 	private String event;
 	private String country;
@@ -130,6 +145,12 @@ public class HorseEvent {
 	}
 	public void setEvent(String event) {
 		this.event = event;
+	}
+	public double getId() {
+		return id;
+	}
+	public void setId(double	 id) {
+		this.id = id;
 	}
 	
 	

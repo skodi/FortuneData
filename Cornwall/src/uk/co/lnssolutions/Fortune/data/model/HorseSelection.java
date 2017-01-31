@@ -1,18 +1,28 @@
-package uk.co.lnssolutions.Fortune.data;
+package uk.co.lnssolutions.Fortune.data.model;
 
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 
 @Entity
-public class Stg_HorseEvent {
+
+public class HorseSelection {
 
 	@Id 
 	private double id;
+	//@ManyToOne
+	//@JoinColumn(name = "EVENT_ID",nullable=false)
+	
+	@ManyToOne
+	@JoinColumn(name = "eventID")
+	private HorseEventFrame horseEventFrame;
 	private double event_ID;
 	private String event;
 	private String country;
@@ -31,6 +41,12 @@ public class Stg_HorseEvent {
 	private int sports_id;
 	private int selection_id;
 	private int win_flag;
+	
+	// Summary fields we add 
+	private double total_number_bets;
+	private double total_volume_matched;
+	private double min_odds;
+	private double max_odds;
 	
 	public double getEvent_ID() {
 		return event_ID;
@@ -145,6 +161,36 @@ public class Stg_HorseEvent {
 	}
 	public void setId(double	 id) {
 		this.id = id;
+	}
+	public int getSports_id() {
+		return sports_id;
+	}
+	public void setSports_id(int sports_id) {
+		this.sports_id = sports_id;
+	}
+	public double getTotal_number_bets() {
+		return total_number_bets;
+	}
+	public void setTotal_number_bets(double total_number_bets) {
+		this.total_number_bets = total_number_bets;
+	}
+	public double getTotal_volume_matched() {
+		return total_volume_matched;
+	}
+	public void setTotal_volume_matched(double total_volume_matched) {
+		this.total_volume_matched = total_volume_matched;
+	}
+	public double getMin_odds() {
+		return min_odds;
+	}
+	public void setMin_odds(double min_odds) {
+		this.min_odds = min_odds;
+	}
+	public double getMax_odds() {
+		return max_odds;
+	}
+	public void setMax_odds(double max_odds) {
+		this.max_odds = max_odds;
 	}
 	
 	
